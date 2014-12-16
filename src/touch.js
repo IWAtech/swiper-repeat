@@ -1,6 +1,6 @@
 'use strict';
 
-var Touch = function() {
+var Touch = function(verticalSwipeHandler) {
 
   var initialOffset, 
       touchStart, 
@@ -16,6 +16,7 @@ var Touch = function() {
       isDragging = true,
       isScrolling = undefined,
       containerWidth = this.getContainerWidth();
+      verticalSwipeHandler(0, 'start', event);
 
       if(this.isInTransition()) {
         initialOffset = this.getSlidesPosition();
@@ -60,16 +61,16 @@ var Touch = function() {
 
       touchDelta = {
         x: touch.pageX - touchStart.x,
-        y: touch.pageY - touchStart.y,
+        y: touch.pageY - touchStart.y
       };
-
       if(isScrolling === undefined) {
         isScrolling = !!(Math.abs(touchDelta.y) > Math.abs(touchDelta.x));
       }
 
       if(isScrolling) {
         isDragging = false;
-        return;
+        verticalSwipeHandler(touchDelta.y, 'move', event);
+        return true;
       }
       
       var offset = (-touchDelta.x / containerWidth) + initialOffset;
@@ -89,6 +90,7 @@ var Touch = function() {
     onTouchEnd: function(event) {
       if(isScrolling) {
         isDragging = false;
+        verticalSwipeHandler(touchDelta.y, 'end');
         return;
       }
 
