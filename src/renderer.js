@@ -21,7 +21,7 @@ var Renderer = function(retranslatorFn) {
     },
 
     transition: function(offset, callback) {
-      this.translate(offset, 250, callback);
+      this.translate(offset, 500, callback);
     },
 
     isInTransition: function() {
