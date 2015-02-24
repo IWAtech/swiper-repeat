@@ -38,6 +38,24 @@ var RendererFull = function(slideFactory) {
 
         };
       }
+
+		var classMap = {'previous': this.slides.left, 'next': this.slides.right, 'current': this.slides.center};
+		// unset classes
+		_.each(renderedSlides, function(renderedSlide) {
+			renderedSlide.element.removeClass(_.keys(classMap).join(' '));
+		});
+
+		// set classes again
+		_.each(classMap, function(slide, className) {
+			if(!slide) {
+				return;
+			}
+			var foundRenderedSlide = _.find(renderedSlides, function(renderedSlide) {
+				return renderedSlide.item === slide.item; });
+			if(foundRenderedSlide) {
+				foundRenderedSlide.element.addClass(className);
+			}
+		});
     },
 
     translateSlides: function(offset, duration) {
